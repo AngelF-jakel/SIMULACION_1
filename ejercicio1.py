@@ -1,35 +1,10 @@
-"""
-Generador Congruencial Inversivo (ICG - Inversive Congruential Generator)
-
-Formula:
-    x_(n+1) = (a * inv(x_n) + c) mod p
-
-donde inv(x_n) es el inverso multiplicativo de x_n modulo p (p primo),
-y por convencion inv(0) = 0.
-
-Como p es primo, el inverso modular se calcula con el pequeño teorema
-de Fermat: inv(x) = x^(p-2) mod p, usando pow(x, p-2, p) de Python
-(muy eficiente, exponenciacion modular rapida).
-"""
-
 
 def generar_icg(semilla: int, cantidad: int,
-                 p: int = 2147483647,   # primo grande (2^31 - 1, primo de Mersenne)
-                 a: int = 1103515245,
-                 c: int = 12345):
-    """
-    Genera una lista de numeros pseudoaleatorios usando un ICG.
-
-    Parametros:
-        semilla  (int): valor inicial x0, debe cumplir 0 <= semilla < p
-        cantidad (int): cuantos numeros generar
-        p (int): modulo, debe ser primo
-        a (int): multiplicador
-        c (int): incremento
-
-    Retorna:
-        list[int]: lista de 'cantidad' numeros pseudoaleatorios en [0, p-1]
-    """
+                 p: int = 1009,   
+                 a: int = 11,
+                 c: int = 12):
+    
+  
     if not (0 <= semilla < p):
         raise ValueError(f"La semilla debe estar en el rango [0, {p - 1}]")
     if cantidad < 0:
@@ -40,6 +15,8 @@ def generar_icg(semilla: int, cantidad: int,
         if x == 0:
             return 0
         return pow(x, modulo - 2, modulo)  # valido porque 'modulo' es primo
+  
+
 
     resultados = []
     x = semilla
@@ -51,25 +28,39 @@ def generar_icg(semilla: int, cantidad: int,
 
 
 def generar_icg_normalizado(semilla: int, cantidad: int,
-                             p: int = 2147483647,
-                             a: int = 1103515245,
-                             c: int = 12345):
+                             p: int = 1009,
+                             a: int = 11,
+                             c: int = 12):
     """
-    Igual que generar_icg, pero devuelve los valores normalizados
-    en el rango [0, 1) dividiendo entre p.
+    Igual quelos valores reales, pero devuelve los valores 
+    en el rango [0, 1) dividiendo entre p
     """
     enteros = generar_icg(semilla, cantidad, p, a, c)
     return [val / p for val in enteros]
+ 
+semilla = int(input("Ingresa la semilla: "))
+cantidad = int(input("Cantidad de numeros a generar: "))
+ 
+numeros = generar_icg(semilla, cantidad)
+print("\nNumeros pseudoaleatorios (enteros):")
+print(numeros)
+ 
+numeros_norm = generar_icg_normalizado(semilla, cantidad)
+print("\nNumeros pseudoaleatorios (normalizados en [0,1)):")
+print([round(v, 6) for v in numeros_norm])
 
 
-if __name__ == "__main__":
-    semilla = int(input("Ingresa la semilla: "))
-    cantidad = int(input("Cantidad de numeros a generar: "))
 
-    numeros = generar_icg(semilla, cantidad)
-    print("\nNumeros pseudoaleatorios (enteros):")
-    print(numeros)
+maximo = round(max(numeros_norm), 6) 
+minimo = round(min(numeros_norm),6)
+promedio = round(sum(numeros_norm)/ len(numeros_norm), 6)
 
-    numeros_norm = generar_icg_normalizado(semilla, cantidad)
-    print("\nNumeros pseudoaleatorios (normalizados en [0,1)):")
-    print([round(v, 6) for v in numeros_norm])
+print(f"\n El numero maximo de esta lista es la siguiente: {maximo} ")
+
+
+print(f"\n El numero minimo de esta lista es el siguiente: {minimo}" )
+
+
+print(f"\n El promedio de los numeros es el siguiente: {promedio}")
+
+
