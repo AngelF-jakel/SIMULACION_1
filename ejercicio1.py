@@ -1,4 +1,4 @@
-
+import matplotlib.pyplot as plt
 def generar_icg(semilla: int, cantidad: int,
                  p: int = 1009,   
                  a: int = 11,
@@ -64,3 +64,8 @@ print(f"\n El numero minimo de esta lista es el siguiente: {minimo}" )
 print(f"\n El promedio de los numeros es el siguiente: {promedio}")
 
 
+plt.hist(numeros_norm, bins=30, edgecolor='black')
+plt.title(f"Distribucion de {cantidad} numeros generados con ICG")
+plt.xlabel("Valor")
+plt.ylabel("Frecuencia")
+plt.show()
